@@ -54,10 +54,10 @@ class DoomscrollDetector:
         self.current_roast = ""
         self.prev_eye_ratio = 0.5
 
-        # Rickroll video
-        self.rickroll_path = "rickroll.mp4"
-        self.rickroll_process = None
-        self.is_rickrolling = False
+        # audio_playback video
+        self.audio_playback_path = "audio_playback.mp4"
+        self.audio_playback_process = None
+        self.is_audio_playbacking = False
 
         # Detection state tracking for stability
         self.doomscroll_count = 0
@@ -174,17 +174,17 @@ class DoomscrollDetector:
 
         return False
 
-    def play_rickroll(self):
-        #Play rickroll video with autoplay (only if not already playing)
-        if not self.is_rickrolling and os.path.exists(self.rickroll_path):
-            self.is_rickrolling = True
+    def play_audio_playback(self):
+        #Play audio_playback video with autoplay (only if not already playing)
+        if not self.is_audio_playbacking and os.path.exists(self.audio_playback_path):
+            self.is_audio_playbacking = True
             # Use system default video player with autoplay in background thread
             def start_video():
                 if os.name == 'posix':  # macOS/Linux
                     if os.uname().sysname == 'Darwin':  # macOS
                         # Use afplay for audio or osascript to force QuickTime to play
-                        self.rickroll_process = subprocess.Popen(
-                            ['osascript', '-e', f'tell application "QuickTime Player" to open POSIX file "{os.path.abspath(self.rickroll_path)}"',
+                        self.audio_playback_process = subprocess.Popen(
+                            ['osascript', '-e', f'tell application "QuickTime Player" to open POSIX file "{os.path.abspath(self.audio_playback_path)}"',
                              '-e', 'tell application "QuickTime Player" to play front document'],
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL
@@ -192,33 +192,33 @@ class DoomscrollDetector:
                     else:  # Linux
                         # Try vlc first because of autoplay, fallback to xdg-open
                         try:
-                            self.rickroll_process = subprocess.Popen(
-                                ['vlc', '--play-and-exit', self.rickroll_path],
+                            self.audio_playback_process = subprocess.Popen(
+                                ['vlc', '--play-and-exit', self.audio_playback_path],
                                 stdout=subprocess.DEVNULL,
                                 stderr=subprocess.DEVNULL
                             )
                         except:
-                            self.rickroll_process = subprocess.Popen(['xdg-open', self.rickroll_path])
+                            self.audio_playback_process = subprocess.Popen(['xdg-open', self.audio_playback_path])
                 else:  # Windows - Someone test on windows pls
-                    os.startfile(self.rickroll_path)
+                    os.startfile(self.audio_playback_path)
 
             # Start video in background thread to avoid blocking
             video_thread = threading.Thread(target=start_video, daemon=True)
             video_thread.start()
 
-    def stop_rickroll(self):
-        """Stop rickroll video"""
-        if self.is_rickrolling:
-            self.is_rickrolling = False
-            if self.rickroll_process:
+    def stop_audio_playback(self):
+        """Stop audio_playback video"""
+        if self.is_audio_playbacking:
+            self.is_audio_playbacking = False
+            if self.audio_playback_process:
                 try:
                     # Kill the video player process
                     if os.uname().sysname == 'Darwin':  # macOS
                         subprocess.run(['killall', 'QuickTime Player'], stderr=subprocess.DEVNULL)
-                    self.rickroll_process.terminate()
+                    self.audio_playback_process.terminate()
                 except:
                     pass
-                self.rickroll_process = None
+                self.audio_playback_process = None
 
     def show_roast(self, frame):
         """Display roasting message on frame"""
@@ -286,14 +286,14 @@ class DoomscrollDetector:
 
             if is_doomscrolling:
                 self.show_roast(frame)
-                # Play rickroll when doomscrolling
-                self.play_rickroll()
+                # Play audio_playback when doomscrolling
+                self.play_audio_playback()
             elif is_normal:
                 # Show encouraging message
                 cv2.putText(frame, "Good posture! Keep it up!", (10, 30),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-                # Stop rickroll when back to normal
-                self.stop_rickroll()
+                # Stop audio_playback when back to normal
+                self.stop_audio_playback()
             else:
                 # Transitioning state - show neutral message
                 cv2.putText(frame, "Monitoring...", (10, 30),
@@ -307,7 +307,7 @@ class DoomscrollDetector:
                 break
 
         # Cleanup
-        self.stop_rickroll()
+        self.stop_audio_playback()
         cap.release()
         cv2.destroyAllWindows()
 
