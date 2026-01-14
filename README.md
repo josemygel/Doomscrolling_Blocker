@@ -1,13 +1,13 @@
 # Doomscrolling Blocker 📱🚫
 
-A Python program that uses your webcam to detect when you're looking down at your phone (aka doomscrolling) and roasts you to get back to work! Features an automatic rickroll video popup when caught!
+A Python program that uses your webcam to detect when you're looking down at your phone (aka doomscrolling) and roasts you to get back to work! Features an automatic audio_playback video popup when caught!
 
 ## Features
 
 - **Real-time face and eye tracking** using OpenCV
 - **Doomscrolling detection** - detects when you tilt your head down
 - **Motivational roasting** - displays harsh but motivating messages when caught
-- **Rickroll punishment** - automatically plays `rickroll.mp4` when you're doomscrolling
+- **Audio Playback punishment** - automatically plays `audio_playback.mp4` when you're doomscrolling
 - **Auto-close video** - stops the video when you return to good posture
 - **Automatic fallback** - works with dlib or OpenCV Haar Cascades
 
@@ -39,7 +39,7 @@ bunzip2 shape_predictor_68_face_landmarks.dat.bz2
 
 ### Setup
 
-1. Place your `rickroll.mp4` file in the project directory
+1. Place your `audio_playback.mp4` file in the project directory
 2. Make sure QuickTime Player (macOS), VLC (Linux), or default video player (Windows) is installed
 
 ## Usage
@@ -63,7 +63,7 @@ python main.py
    - Your face moves to the lower portion of the frame
    - Your eyes are positioned low in your face region
 4. **Roasting**: Displays motivational (harsh) messages every 3 seconds when caught
-5. **Rickroll**: Automatically opens and plays `rickroll.mp4` when doomscrolling detected
+5. **Audio Playback**: Automatically opens and plays `audio_playback.mp4` when doomscrolling detected
 6. **Auto-stop**: Closes the video when you return to normal posture
 
 ## Sample Roasts
@@ -82,7 +82,7 @@ python main.py
 - NumPy
 - dlib (optional, for better accuracy)
 - QuickTime Player (macOS) or VLC (Linux) or Windows Media Player (Windows)
-- `rickroll.mp4` file in project directory
+- `audio_playback.mp4` file in project directory
 
 ## Customization
 
@@ -90,7 +90,7 @@ Edit `main.py` to customize:
 - **Roast messages**: Modify the `self.roasts` list (line 31-45)
 - **Detection sensitivity**: Adjust `face_position_ratio` thresholds (line 118, 124)
 - **Roast frequency**: Change `self.roast_cooldown` (line 50, default: 3 seconds)
-- **Video file**: Change `self.rickroll_path` (line 55) to use a different video
+- **Video file**: Change `self.audio_playback_path` (line 55) to use a different video
 
 ## Troubleshooting
 
